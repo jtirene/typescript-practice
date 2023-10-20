@@ -5,6 +5,14 @@
 ### Package Init
 
 1. `npm init` (accept all defaults)
+2. Create `.gitignore` with the following
+
+```
+node_modules/
+out/
+coverage/
+.vscode/
+```
 
 ### Typescript Install
 
@@ -40,7 +48,8 @@ https://jestjs.io/docs/getting-started#via-ts-jest
 
 1. `npm install --save-dev jest`
 2. `npm install --save-dev ts-jest`
-3. Create `jest.config.js`
+3. `npm install --save-dev @jest/globals`
+4. Create `jest.config.js`
 
 ```
 /**
@@ -243,13 +252,44 @@ const config = {
 module.exports = config;
 ```
 
-4. `npm install --save-dev @jest/globals`
-5. Install Jest plugin
-   https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest
-6. Run tests using "Testing" tab on left nav
-7. Display coverage on source files using `Command Palette (CTRL + Shift + P) -> Jest: Toggle Coverage`
+5. add script to `package.json`:
 
-### VSCode Integration
+   `"test": "jest --coverage"`
+
+6. Install Jest plugin
+   https://marketplace.visualstudio.com/items?itemName=Orta.vscode-jest
+7. Reload vscode `Command Palette (CTRL + Shift + P) -> Developer: Reload Window`
+8. Run tests using "Testing" tab on left nav
+9. Display coverage on source files using `Command Palette (CTRL + Shift + P) -> Jest: Toggle Coverage`
+10. Create file `src/greeting.ts`
+
+```
+export function greeting(name: string): string {
+  if (!name) {
+    return "Hello mystery person!";
+  }
+  return `Hello ${name}!`;
+}
+```
+
+11. Create file `src/greeting.test.ts`
+
+```
+import { describe, expect, it } from "@jest/globals";
+import { greeting } from "./greeting";
+
+describe("Greeting Tests", () => {
+  it("should return greeting", () => {
+    expect(greeting("Alice")).toBe("Hello Alice!");
+  });
+  it("should return mystery greeting", () => {
+    expect(greeting("")).toBe("Hello mystery person!");
+  });
+});
+
+```
+
+### VSCode Launch Configuration (optional)
 
 1. Create `.vscode/launch.json` file
 
